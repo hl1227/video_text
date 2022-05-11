@@ -7,7 +7,10 @@ class Get_detail_data():
         # self.domain=domain
         # self.keyword=keyword
         # self.video_num=video_num
-        self.driver=webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        # chrome_options.add_argument('--headless')
+        # chrome_options.add_argument('blink-settings=imagesEnabled=false')
+        self.driver=webdriver.Chrome(options=chrome_options)
     def __driver_slide(self):
         body = self.driver.find_element_by_tag_name("body")
         body.send_keys(Keys.PAGE_DOWN)
@@ -16,13 +19,13 @@ class Get_detail_data():
     def get_youtube_detail(self,keyword,video_num:int):
         res=[]
         self.driver.get('https://www.youtube.com/results?search_query={}&sp=CAASBBABGAE%253D'.format(keyword))
-        for slide_count in range(0,100):#循环下拉
+        for slide_count in range(0,80):#循环下拉
             self.__driver_slide()
             time.sleep(1)
             detail_url_list = self.driver.find_elements_by_xpath("//div[@id='dismissible']//a[@id='thumbnail']")
             getting_num=len(detail_url_list)
             print(f'下拉第{slide_count}次,获取到关键字:{keyword},共{getting_num}个视频!!')
-            if getting_num>video_num+4:
+            if getting_num>=video_num:
                 self.__driver_slide()
                 break
         detail_url_list = self.driver.find_elements_by_xpath("//div[@id='dismissible']//a[@id='video-title']")[0:video_num]

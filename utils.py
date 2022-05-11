@@ -28,7 +28,7 @@ def delete_video_dir(keyword):
         # os.rmdir(video_path)
         # print(f'文件夹删除成功:{video_path}')
         for video_name in os.listdir(video_path):
-            if video_name[-3:] in ['pcm','wav']:#删除pcm和wav文件,保留MP4
+            if video_name[-3:] in ['pcm','wav','mp4']:#删除pcm和wav文件,保留MP4
                 os.remove(os.path.join(video_path,video_name))
 
 #删除封面文件

@@ -4,9 +4,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 class Speech_text():
     def __init__(self):
-        APP_ID = '25240546'
-        API_KEY = 'voCNxHTPV7tyTeUujXhFqnMf'
-        SECRET_KEY = '5lUBdDGx67V1kt3EqeQ922ZZtSHOfQyP'
+        APP_ID = '25306101'
+        API_KEY = 'hdNLX9RLwIdgUob2L1G7lXAW'
+        SECRET_KEY = 'FmSNi7RlVI5uGt3zra9BcMBCN8GEYGC8'
         self.client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
         if config.PROXY:
             self.client.setProxies(config.PROXY)
@@ -28,7 +28,7 @@ class Speech_text():
 
     def run(self,file_path_list):
         content=''
-        with ThreadPoolExecutor(max_workers=2) as pool:
+        with ThreadPoolExecutor(max_workers=4) as pool:
             res_iterator=pool.map(self.asr,file_path_list)
             for res in res_iterator:
                 content+=res
@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     speech_text=Speech_text()
     # for file in ['./videos/Mv3dkRmCnOA_1.pcm', './videos/Mv3dkRmCnOA_2.pcm', './videos/Mv3dkRmCnOA_3.pcm', './videos/Mv3dkRmCnOA_4.pcm', './videos/Mv3dkRmCnOA_5.pcm']:
-    content=speech_text.run(['videos/cricket+english/_O5_Kb-coT8_1.pcm','videos/cricket+english/_O5_Kb-coT8_2.pcm','videos/cricket+english/_O5_Kb-coT8_3.pcm','videos/cricket+english/_O5_Kb-coT8_4.pcm','videos/cricket+english/_O5_Kb-coT8_5.pcm','videos/cricket+english/_O5_Kb-coT8_6.pcm'])
+    content=speech_text.run(['./videos/.default/-uevumiLg8I_1.pcm', './videos/.default/-uevumiLg8I_2.pcm', './videos/.default/-uevumiLg8I_3.pcm'])
     print(content)
 
         # res=pool.map(speech_text.run,)

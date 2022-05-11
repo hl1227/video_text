@@ -24,3 +24,9 @@ class Video_speech():
             speech_list.append(ffmpeg_video_name)
             my_audio_clip.close()
         return  speech_list
+
+
+if __name__ == '__main__':
+    video_speech = Video_speech()
+    res=video_speech.run('./videos/.default/-uevumiLg8I.mp4')
+    print(res)

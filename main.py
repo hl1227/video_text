@@ -2,7 +2,7 @@ from video_speech import Video_speech
 from speech_text import Speech_text
 from get_video import Get_video
 from get_detail_data import Get_detail_data
-from utils import create_video_dir,create_text_dir
+from utils import create_video_dir,create_text_dir,delete_video_dir
 from mysql_db import Mysql_session
 from multiprocessing import Pool
 import config,os
@@ -23,6 +23,7 @@ def run(domain,keyword0,category,video_num:int):
     detail_data_list = Get_detail_data().run(domain=domain, keyword=keyword, video_num=video_num)
 
     # 处理详情数据
+
     for detail_data in detail_data_list:
         if mysql_session.check_duplicate(detail_data['source']) == True:#去重
             detail_data_list.remove(detail_data)
@@ -30,9 +31,8 @@ def run(domain,keyword0,category,video_num:int):
         else:
             detail_data.update({'category': category})  # 增加分类
             print(mysql_session.save_1(detail_data))  # 第一次入库
-
     #下载视频
-    pool = Pool(8)
+    pool = Pool(6)
     pool.map_async(get_video.run,detail_data_list)
     pool.close()
     pool.join()
@@ -58,9 +58,17 @@ def run(domain,keyword0,category,video_num:int):
         mysql_session.save_2(content=content,source=source,img_path=img_path)
         print(f'二次入库完成:{video_name}!!')
     mysql_session.repair_data()
+    delete_video_dir(keyword)
+
 
 
 if __name__ == '__main__':
-    for key in ['T20 World Cup','Cricket star']:
-        run(domain='youtube', keyword0=key,category='体育项目',video_num=700)
-    #os.system('shutdown /s /f /t 60')
+    for key in [
+                'Dragon Tiger game',
+                ]:
+    #for key in open('youtube_key.txt','r',encoding='utf-8').readlines():
+        try:
+            run(domain='youtube', keyword0=key.replace('\n',''),category='体育项目',video_num=490)
+        except Exception as e:
+            print(f'big error:{e}')
+    os.system('shutdown /s /f /t 60')
